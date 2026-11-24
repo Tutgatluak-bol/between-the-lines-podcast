@@ -69,7 +69,7 @@ export default function Home() {
             className="relative w-full pt-0 lg:pt-2"
           >
             <img
-              src="/images/host-studio.png"
+              src="/images/host-studio.webp"
               alt="Between the Lines podcast host in the recording studio"
               className="block aspect-[4/3] w-full object-cover object-center shadow-xl"
             />

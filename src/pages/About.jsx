@@ -79,7 +79,7 @@ export default function About() {
             transition={{ duration: 0.7 }}
           >
             <img
-              src="/images/host-studio.png"
+              src="/images/host-studio.webp"
               alt="Tut Gatluak Bol, founder and host of Between the Lines"
               className="aspect-[4/5] w-full object-cover object-center shadow-xl"
             />
