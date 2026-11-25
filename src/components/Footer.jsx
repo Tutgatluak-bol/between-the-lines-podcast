@@ -1,13 +1,12 @@
 
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Phone } from "lucide-react";
 import { navigation } from "../data/navigation";
 
 export default function Footer() {
   return (
     <footer className="bg-dark-brown px-6 py-16 text-cream md:px-10">
       <div className="mx-auto max-w-7xl">
-
         <div className="grid gap-12 border-b border-cream/15 pb-12 md:grid-cols-2 lg:grid-cols-3">
 
           <div>
@@ -53,14 +52,33 @@ export default function Footer() {
               We'd love to hear from you.
             </p>
 
-            <Link
-              to="/contact"
-              className="mt-5 inline-flex items-center gap-2 text-sm text-cream hover:text-white"
-            >
-              Get in touch <ArrowUpRight size={16} />
-            </Link>
-          </div>
+            <div className="mt-5 flex flex-col items-start gap-4">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 text-sm text-cream transition hover:text-white"
+              >
+                Get in touch <ArrowUpRight size={16} />
+              </Link>
 
+              <a
+                href="tel:+211923482721"
+                className="inline-flex items-center gap-2 text-sm text-cream/65 transition hover:text-cream"
+              >
+                <Phone size={16} />
+                +211 923 482 721
+              </a>
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61596471797746"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-cream/65 transition hover:text-cream"
+              >
+                Facebook
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col justify-between gap-5 pt-8 text-xs text-cream/50 md:flex-row">
@@ -68,9 +86,10 @@ export default function Footer() {
             © {new Date().getFullYear()} Between the Lines. All rights reserved.
           </p>
 
-          <p>Starting in Juba, South Sudan. Connecting stories beyond borders.</p>
+          <p>
+            Starting in Juba, South Sudan. Connecting stories beyond borders.
+          </p>
         </div>
-
       </div>
     </footer>
   );
