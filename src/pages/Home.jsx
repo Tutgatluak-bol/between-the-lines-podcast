@@ -8,21 +8,21 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="overflow-hidden bg-cream px-6 pb-16 pt-8 md:px-10 md:pb-20 md:pt-10 lg:px-12 lg:pb-24 lg:pt-6">
-        <div className="mx-auto grid max-w-7xl items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+      <section className="overflow-hidden bg-cream px-6 pb-12 pt-6 md:px-10 md:pb-16 md:pt-8 lg:px-12 lg:pb-16 lg:pt-4">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
 
           {/* Hero text */}
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="lg:pt-2"
+            className="lg:py-4"
           >
-            <p className="mb-7 text-xs font-semibold uppercase tracking-[0.3em] text-coffee">
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-coffee">
               An independent conversation-based podcast
             </p>
 
-            <h1 className="font-display text-4xl leading-[1] font-medium text-dark-brown sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl">
+            <h1 className="font-display text-4xl leading-[1.05] font-medium text-dark-brown sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem]">
               Beyond the title.
               <br />
               <span className="italic text-coffee">
@@ -30,16 +30,16 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mt-7 max-w-xl text-base leading-8 text-dark-brown/70 md:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-7 text-dark-brown/70 md:text-lg md:leading-8">
               Every person has a story beyond their professional title.
               We explore the journeys, experiences and ideas behind
               people shaping technology, business and the world around us.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-5">
+            <div className="mt-7 flex flex-wrap items-center gap-4">
               <Link
                 to="/episodes"
-                className="inline-flex items-center gap-3 bg-dark-brown px-7 py-4 text-sm font-medium text-cream transition hover:bg-coffee"
+                className="inline-flex items-center gap-3 bg-dark-brown px-6 py-3.5 text-sm font-medium text-cream transition hover:bg-coffee"
               >
                 Explore Conversations
                 <ArrowUpRight size={17} />
@@ -53,7 +53,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center gap-4">
+            <div className="mt-8 flex items-center gap-4">
               <span className="h-px w-12 bg-coffee/50" />
               <p className="text-xs uppercase tracking-[0.2em] text-coffee">
                 Starting in Juba, South Sudan
