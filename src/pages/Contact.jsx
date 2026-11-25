@@ -133,7 +133,7 @@ export default function Contact() {
               hello@betweenthelinesafrica.com
             </p>
             <p className="mt-2 text-xs text-cream/45">
-              Email forwarding setup is in progress.
+              Reach us directly at hello@betweenthelinesafrica.com.
             </p>
           </div>
 
