@@ -108,24 +108,39 @@ export default function BeGuest() {
 
   return (
     <main className="bg-cream">
-      {/* Hero */}
-      <section className="px-6 py-24 md:px-10 md:py-32">
-        <div className="mx-auto max-w-7xl">
+            {/* Hero */}
+      <section
+        className="relative isolate flex min-h-[75vh] items-center overflow-hidden bg-dark-brown px-6 py-24 md:min-h-[85vh] md:px-10 md:py-32"
+        style={{
+          backgroundImage:
+            "url('/images/between-the-lines-host-and-guest.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 -z-10 bg-dark-brown/65" />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-dark-brown/90 via-dark-brown/55 to-dark-brown/20" />
+
+        <div className="mx-auto w-full max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
+            className="max-w-4xl"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-coffee">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cream">
               Become a guest
             </p>
 
-            <h1 className="mt-8 max-w-5xl font-display text-5xl leading-[1.12] text-dark-brown md:text-7xl lg:text-8xl">
+            <h1 className="mt-8 font-display text-5xl leading-[1.12] text-cream md:text-7xl lg:text-8xl">
               Your story deserves
-              <span className="text-coffee"> to be heard.</span>
+              <span className="text-cream/70"> to be heard.</span>
             </h1>
 
-            <p className="mt-8 max-w-2xl text-lg leading-9 text-dark-brown/65">
+            <p className="mt-8 max-w-2xl text-lg leading-9 text-cream/80">
               Every journey carries lessons. If you have experiences,
               ideas or perspectives worth sharing, we would love to
               hear from you.
@@ -133,6 +148,7 @@ export default function BeGuest() {
           </motion.div>
         </div>
       </section>
+      
 
       {/* Invitation */}
       <section className="bg-dark-brown px-6 py-20 text-cream md:px-10 md:py-24">

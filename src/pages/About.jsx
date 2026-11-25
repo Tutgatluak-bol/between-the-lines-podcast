@@ -9,23 +9,37 @@ export default function About() {
   return (
     <main className="bg-cream">
       {/* Page introduction */}
-      <section className="px-6 py-20 md:px-10 md:py-28">
-        <div className="mx-auto max-w-7xl">
+      <section
+        className="relative isolate flex min-h-[75vh] items-center overflow-hidden bg-dark-brown px-6 py-24 md:min-h-[85vh] md:px-10 md:py-32"
+        style={{
+          backgroundImage: "url('/images/about-microphone.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center right",
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 -z-10 bg-dark-brown/35" />
+
+        {/* Gradient for text readability */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-dark-brown/95 via-dark-brown/75 to-dark-brown/10" />
+
+        <div className="mx-auto w-full max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
+            className="max-w-4xl"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-coffee">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cream/80">
               About the podcast
             </p>
 
-            <h1 className="mt-8 max-w-5xl font-display text-5xl leading-[1.12] text-dark-brown md:text-7xl lg:text-8xl">
+            <h1 className="mt-8 font-display text-5xl leading-[1.12] text-cream md:text-7xl lg:text-8xl">
               Every story has
-              <span className="text-coffee"> another side.</span>
+              <span className="text-cream/70"> another side.</span>
             </h1>
 
-            <p className="mt-8 max-w-2xl text-lg leading-9 text-dark-brown/65">
+            <p className="mt-8 max-w-2xl text-lg leading-9 text-cream/80">
               Between the Lines is a conversation platform exploring the
               people, experiences, ideas and lessons behind the stories
               we often hear but rarely take time to understand.
