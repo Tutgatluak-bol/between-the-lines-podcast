@@ -6,6 +6,9 @@ import {
   Mic2,
   MessageCircle,
   Lightbulb,
+  CheckCircle2,
+  AlertCircle,
+  LoaderCircle,
 } from "lucide-react";
 
 const initialForm = {
@@ -21,7 +24,8 @@ const initialForm = {
 
 export default function BeGuest() {
   const [form, setForm] = useState(initialForm);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [feedback, setFeedback] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -32,11 +36,74 @@ export default function BeGuest() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    // Frontend preview only. Connect a submission service before launch.
-    setSubmitted(true);
+    setStatus("loading");
+    setFeedback("");
+
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    if (!accessKey) {
+      setStatus("error");
+      setFeedback(
+        "The guest application form is not configured yet. Please try again later."
+      );
+      return;
+    }
+
+    const payload = {
+      access_key: accessKey,
+      subject: `Between the Lines | New Guest Application – ${form.fullName}`,
+      from_name: "Between the Lines Website",
+      email: form.email,
+      replyto: form.email,
+
+      "Full Name": form.fullName,
+      "Email Address": form.email,
+      Location: form.location,
+      Profession: form.profession,
+      Background: form.background,
+      "Proposed Discussion Topic": form.topic,
+      "Why This Conversation Matters": form.reason,
+      "Website or Social Media": form.socialLink || "Not provided",
+
+      botcheck: "",
+    };
+
+    try {
+      const response = await fetch(
+        "https://api.web3forms.com/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus("success");
+        setFeedback(
+          "Thank you for sharing your story with us. Your application has been received. Our team will review your submission and get in touch if there is an opportunity to have you on the podcast."
+        );
+        setForm(initialForm);
+      } else {
+        throw new Error(
+          result.message || "Your application could not be submitted."
+        );
+      }
+    } catch (error) {
+      setStatus("error");
+      setFeedback(
+        error.message ||
+          "Something went wrong. Please try submitting your application again."
+      );
+    }
   }
 
   return (
@@ -72,9 +139,11 @@ export default function BeGuest() {
         <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-3">
           <div>
             <Mic2 size={28} strokeWidth={1.3} />
+
             <h2 className="mt-6 font-display text-2xl">
               Meaningful conversations
             </h2>
+
             <p className="mt-4 text-sm leading-7 text-cream/65">
               We want honest discussions that go beyond headlines and
               professional titles.
@@ -83,9 +152,11 @@ export default function BeGuest() {
 
           <div>
             <Lightbulb size={28} strokeWidth={1.3} />
+
             <h2 className="mt-6 font-display text-2xl">
               Different perspectives
             </h2>
+
             <p className="mt-4 text-sm leading-7 text-cream/65">
               We welcome people from different industries, backgrounds
               and stages of their journeys.
@@ -94,9 +165,11 @@ export default function BeGuest() {
 
           <div>
             <MessageCircle size={28} strokeWidth={1.3} />
+
             <h2 className="mt-6 font-display text-2xl">
               Your experience matters
             </h2>
+
             <p className="mt-4 text-sm leading-7 text-cream/65">
               You do not need to be famous. A valuable story begins
               with something worth sharing.
@@ -126,6 +199,7 @@ export default function BeGuest() {
               <p className="text-sm font-semibold text-dark-brown">
                 What happens next?
               </p>
+
               <p className="mt-3 text-sm leading-7 text-dark-brown/60">
                 We will review your introduction and consider whether
                 your proposed conversation fits the podcast's direction.
@@ -134,79 +208,126 @@ export default function BeGuest() {
           </div>
 
           <div>
-            {submitted ? (
-              <div className="border border-coffee/20 p-8 md:p-12">
-                <h3 className="font-display text-3xl text-dark-brown">
-                  Form preview completed.
+            {status === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="border border-coffee/20 p-8 md:p-12"
+                aria-live="polite"
+              >
+                <CheckCircle2
+                  size={34}
+                  className="text-coffee"
+                  strokeWidth={1.5}
+                />
+
+                <h3 className="mt-6 font-display text-3xl text-dark-brown">
+                  Application received.
                 </h3>
+
                 <p className="mt-5 text-sm leading-7 text-dark-brown/65">
-                  Your details have not been sent or stored. This form
-                  is currently a frontend preview. We will connect a
-                  submission service before accepting real applications.
+                  {feedback}
                 </p>
+
                 <button
                   type="button"
                   onClick={() => {
-                    setForm(initialForm);
-                    setSubmitted(false);
+                    setStatus("idle");
+                    setFeedback("");
                   }}
                   className="mt-8 text-sm font-semibold text-coffee underline underline-offset-4"
                 >
-                  Fill in another response
+                  Submit another application
                 </button>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Spam protection */}
+                <input
+                  type="checkbox"
+                  name="botcheck"
+                  className="hidden"
+                  tabIndex="-1"
+                  autoComplete="off"
+                />
+
                 <div className="grid gap-7 sm:grid-cols-2">
                   <div>
-                    <label className="text-sm font-medium text-dark-brown">
+                    <label
+                      htmlFor="guest-full-name"
+                      className="text-sm font-medium text-dark-brown"
+                    >
                       Full name *
                     </label>
+
                     <input
+                      id="guest-full-name"
                       required
+                      maxLength={100}
                       name="fullName"
                       value={form.fullName}
                       onChange={handleChange}
                       placeholder="Your full name"
+                      autoComplete="name"
                       className="mt-3 w-full border-b border-dark-brown/25 bg-transparent px-0 py-3 text-sm outline-none transition placeholder:text-dark-brown/35 focus:border-coffee"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-dark-brown">
+                    <label
+                      htmlFor="guest-email"
+                      className="text-sm font-medium text-dark-brown"
+                    >
                       Email address *
                     </label>
+
                     <input
+                      id="guest-email"
                       required
                       type="email"
+                      maxLength={254}
                       name="email"
                       value={form.email}
                       onChange={handleChange}
                       placeholder="you@example.com"
+                      autoComplete="email"
                       className="mt-3 w-full border-b border-dark-brown/25 bg-transparent px-0 py-3 text-sm outline-none transition placeholder:text-dark-brown/35 focus:border-coffee"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-dark-brown">
+                    <label
+                      htmlFor="guest-location"
+                      className="text-sm font-medium text-dark-brown"
+                    >
                       Location *
                     </label>
+
                     <input
+                      id="guest-location"
                       required
+                      maxLength={150}
                       name="location"
                       value={form.location}
                       onChange={handleChange}
                       placeholder="City and country"
+                      autoComplete="country-name"
                       className="mt-3 w-full border-b border-dark-brown/25 bg-transparent px-0 py-3 text-sm outline-none transition placeholder:text-dark-brown/35 focus:border-coffee"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-dark-brown">
+                    <label
+                      htmlFor="guest-profession"
+                      className="text-sm font-medium text-dark-brown"
+                    >
                       Profession or area of work *
                     </label>
+
                     <input
+                      id="guest-profession"
                       required
+                      maxLength={150}
                       name="profession"
                       value={form.profession}
                       onChange={handleChange}
@@ -217,11 +338,17 @@ export default function BeGuest() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-dark-brown">
+                  <label
+                    htmlFor="guest-background"
+                    className="text-sm font-medium text-dark-brown"
+                  >
                     Tell us about yourself *
                   </label>
+
                   <textarea
+                    id="guest-background"
                     required
+                    maxLength={3000}
                     rows={4}
                     name="background"
                     value={form.background}
@@ -232,11 +359,17 @@ export default function BeGuest() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-dark-brown">
+                  <label
+                    htmlFor="guest-topic"
+                    className="text-sm font-medium text-dark-brown"
+                  >
                     What would you like to discuss? *
                   </label>
+
                   <textarea
+                    id="guest-topic"
                     required
+                    maxLength={2000}
                     rows={3}
                     name="topic"
                     value={form.topic}
@@ -247,11 +380,17 @@ export default function BeGuest() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-dark-brown">
+                  <label
+                    htmlFor="guest-reason"
+                    className="text-sm font-medium text-dark-brown"
+                  >
                     Why would this conversation matter to our audience? *
                   </label>
+
                   <textarea
+                    id="guest-reason"
                     required
+                    maxLength={2000}
                     rows={3}
                     name="reason"
                     value={form.reason}
@@ -262,15 +401,21 @@ export default function BeGuest() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-dark-brown">
+                  <label
+                    htmlFor="guest-social-link"
+                    className="text-sm font-medium text-dark-brown"
+                  >
                     Website or social media link
                     <span className="ml-2 font-normal text-dark-brown/45">
                       (Optional)
                     </span>
                   </label>
+
                   <input
+                    id="guest-social-link"
                     name="socialLink"
                     type="url"
+                    maxLength={500}
                     value={form.socialLink}
                     onChange={handleChange}
                     placeholder="https://..."
@@ -278,17 +423,46 @@ export default function BeGuest() {
                   />
                 </div>
 
+                {/* Submission feedback */}
+                {status === "error" && (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-3 text-sm leading-6 text-red-700"
+                  >
+                    <AlertCircle
+                      size={19}
+                      className="mt-0.5 shrink-0"
+                    />
+                    <p>{feedback}</p>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-3 bg-dark-brown px-8 py-4 text-sm font-medium text-cream transition hover:bg-coffee"
+                  disabled={status === "loading"}
+                  className="inline-flex items-center gap-3 bg-dark-brown px-8 py-4 text-sm font-medium text-cream transition hover:bg-coffee disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Submit guest interest
-                  <ArrowUpRight size={17} />
+                  {status === "loading" ? (
+                    <>
+                      Submitting application
+                      <LoaderCircle
+                        size={17}
+                        className="animate-spin"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      Submit guest interest
+                      <ArrowUpRight size={17} />
+                    </>
+                  )}
                 </button>
 
                 <p className="text-xs leading-6 text-dark-brown/45">
-                  This is a frontend preview. Your information is not
-                  transmitted until a submission service is connected.
+                  Your application will be submitted securely through
+                  our application form service. We will only use your
+                  information to review your guest application and
+                  contact you about it.
                 </p>
               </form>
             )}
