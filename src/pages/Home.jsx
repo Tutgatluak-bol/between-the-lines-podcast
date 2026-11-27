@@ -46,10 +46,11 @@ export default function Home() {
               </Link>
 
               <Link
-                to="/about"
-                className="text-sm font-semibold text-dark-brown transition hover:text-coffee"
+                to="/work-with-us"
+                className="inline-flex items-center gap-2 border border-dark-brown/30 px-6 py-3.5 text-sm font-semibold text-dark-brown transition hover:border-coffee hover:bg-coffee hover:text-cream"
               >
-                Discover our story
+                Partner With Us
+                <ArrowUpRight size={17} />
               </Link>
             </div>
 
